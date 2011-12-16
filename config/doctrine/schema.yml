@@ -1,0 +1,55 @@
+FrisbeeGame:
+  columns:
+    lat:
+      type: float(10,6)
+      notnull: true
+    lng:
+      type: float(10,6)
+      notnull: true      
+    started_at:
+      type: datetime
+      notnull: true
+    last_action:
+      type: datetime
+    created_by: 
+      type: integer(20)
+  actAs:
+    Timestampable:
+      created:
+        name: started_at
+        type: timestamp
+        format: Y-m-d H:i:s
+      updated:
+        disabled: true
+  relations:
+    Host:
+      class: FrisbeePlayer   
+      local: created_by
+      foreignAlias: MyGames
+    Players:
+      class: FrisbeePlayer
+      refClass: FrisbeeGamePlayer
+      foreignAlias: Games
+    
+FrisbeePlayer:
+  actAs: { Timestampable: ~ }
+  columns:
+    nickname: { type: string(255), notnull: true }
+    password: { type: string(255), notnull: true }
+    email: { type: string(255), notnull: true }
+    is_active: { type: boolean, notnull: true, default: 0 }
+    
+FrisbeeGamePlayer:
+ columns:
+  frisbee_game_id:
+   type: integer(20)
+  frisbee_player_id:
+   type: integer(20)
+ relations:
+  Game:
+   class: FrisbeeGame
+   foreignAlias: FrisbeeGamePlayers
+  Player:
+   class: FrisbeePlayer
+   foreignAlias: FrisbeeGamePlayers
+    
